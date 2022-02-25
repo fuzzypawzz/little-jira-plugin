@@ -44,7 +44,7 @@ export default {
     },
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     console.log("Modal got destroyed.");
   },
 

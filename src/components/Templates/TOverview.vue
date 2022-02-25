@@ -38,7 +38,7 @@ export default {
     },
   },
 
-  destroyed() {
+  unmounted() {
     console.log("TOverview got destroyed");
   },
 

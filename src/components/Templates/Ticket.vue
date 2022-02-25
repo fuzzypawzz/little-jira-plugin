@@ -142,7 +142,7 @@ export default {
     },
   },
 
-  destroyed() {
+  unmounted() {
     console.log("Ticket got destroyed");
   },
 
