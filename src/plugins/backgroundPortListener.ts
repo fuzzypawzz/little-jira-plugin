@@ -25,6 +25,6 @@ export default {
     });
 
     // TODO: Convert to vue 3
-    Vue.prototype.$port = backgroundPort;
+    // Vue.prototype.$port = backgroundPort;
   },
 };

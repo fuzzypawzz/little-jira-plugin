@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "OptionsPageApp",
@@ -59,7 +59,9 @@ export default defineComponent({
     restoreOptions() {
       // Uncaught (in promise) Error: The storage API will not work with a temporary addon ID. Please add an explicit addon ID to your manifest. For more information see https://mzl.la/3lPk1aE.
       /* eslint-disable-next-line */
-      const storageItem = browser.storage.managed.get(this.storageName);
+      const storageItem: { [index: string]: any } = browser.storage.managed.get(
+        this.storageName
+      );
       this.path = storageItem[this.storageName];
     },
 
