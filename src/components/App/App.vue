@@ -1,6 +1,6 @@
 <template>
   <div>
-    <c-search-bar></c-search-bar>
+    <lj-navigation-bar></lj-navigation-bar>
     <router-view v-if="isReady"></router-view>
 
     <!-- REMOVE THE MODAL STATE STATE IF ITS NO REQURIED -->
@@ -23,13 +23,13 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import CSearchBar from "@/components/Organisms/CSearchBar.vue/CSearchBar.vue";
+import LjNavigationBar from "@/components/Organisms/navigation-bar/lj-navigation-bar.vue";
 
 import { mapState, mapMutations, mapActions } from "vuex";
 
 export default defineComponent({
   name: "App",
-  components: { CSearchBar },
+  components: { LjNavigationBar },
   data() {
     return {
       contentContext: undefined,
