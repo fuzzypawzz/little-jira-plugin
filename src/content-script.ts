@@ -2,7 +2,6 @@ import devtools from "@vue/devtools";
 import { createApp } from "vue";
 import App from "@/components/App/App.vue";
 import CButton from "@/components/Atoms/CButton/Cbutton.vue";
-import CModal from "@/components/Organisms/CModal/CModal.vue";
 import store from "@/store";
 import router from "@/router";
 import portListenerPlugin from "@/plugins/backgroundPortListener";
@@ -27,7 +26,6 @@ try {
 
     createApp(App)
       .component("c-button", CButton)
-      .component("c-modal", CModal)
       .use(portListenerPlugin)
       .use(fetchPlugin)
       .use(store)

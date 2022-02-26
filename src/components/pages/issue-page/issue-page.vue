@@ -108,51 +108,51 @@
 </template>
 
 <script>
-import CLink from "@/components/Atoms/CLink/CLink.vue";
+import { defineComponent } from 'vue'
 
-import { mapState, mapActions } from "vuex";
+// import CLink from '@/components/Atoms/CLink/CLink.vue'
 
-export default {
-  components: { CLink },
+import { mapState, mapMutations } from 'vuex'
+
+import { MUTATIONS as INDEX_MUTATIONS } from '@/store'
+
+export default defineComponent({
+  // components: { CLink },
 
   data() {
     return {
       CModal: undefined,
       networking: false,
-    };
+    }
   },
 
   computed: {
-    ...mapState("ISSUE", [
-      "status",
-      "meta",
-      "assignee",
-      "issueType",
-      "reporter",
-      "descriptionMarkup",
-      "labels",
-      "priority",
-      "issueLinks",
-      "comments",
-      "summary",
-      "subtasks",
+    ...mapState('ISSUE', [
+      'status',
+      'meta',
+      'assignee',
+      'issueType',
+      'reporter',
+      'descriptionMarkup',
+      'labels',
+      'priority',
+      'issueLinks',
+      'comments',
+      'summary',
+      'subtasks',
     ]),
 
     editIssueLink() {
-      return `secure/EditIssue!default.jspa?id=${this.meta?.id}`;
+      return `secure/EditIssue!default.jspa?id=${this.meta?.id}`
     },
   },
 
   unmounted() {
-    console.log("Ticket got destroyed");
-  },
-
-  created() {
-    // this.loadIssue();
+    console.log('Ticket got destroyed')
   },
 
   mounted() {
-    console.log("Ticket mounted");
+    this.showModal()
   },
 
   // beforeRouteUpdate(to, from, next) {
@@ -161,6 +161,14 @@ export default {
   // },
 
   methods: {
+    ...mapMutations({
+      setModalStateMutation: INDEX_MUTATIONS.SET_MODAL_STATE
+    }),
+
+    showModal() {
+      this.setModalStateMutation(true)
+    },
+
     // ...mapActions({
     //   getIssue: "ISSUE/GET_ISSUE",
     // }),
@@ -170,10 +178,10 @@ export default {
     // },
 
     createBrowseUrl(key) {
-      return `/browse/${key}/`;
+      return `/browse/${key}/`
     },
   },
-};
+})
 </script>
 
 <style lang="scss" scoped>

@@ -1,7 +1,7 @@
 <template>
-  <c-modal v-if="dataIsAvailable">
+  <div>
     <!-- TODO: This content should come from somewhere -->
-    <h4>Hi user displayName}</h4>
+    <h4>Hi {{ userDetails.displayName }} ({{ userDetails.userId }})</h4>
 
     <!-- TODO: This content should come from somewhere -->
     <p>These issues are assigned to you:</p>
@@ -22,15 +22,18 @@
         </tr>
       </tbody>
     </table>
-  </c-modal>
+  </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import CButton from "@/components/Atoms/CButton/Cbutton.vue";
-
-import { mapState, mapActions } from 'vuex'
+import { mapMutations, mapGetters, mapActions } from 'vuex'
+import { MUTATIONS as INDEX_MUTATIONS } from '@/store'
+import {
+  GETTERS as PROFILE_GETTERS,
+  ACTIONS as PROFILE_ACTIONS,
+} from '@/store/modules/profile'
 
 import { ROUTE_NAMES } from '@/router'
 
@@ -40,39 +43,47 @@ export default defineComponent({
   data() {
     return {
       data: {
-        issues: []
-      }
+        issues: [],
+      },
     }
   },
 
   computed: {
-    // ...mapState('PROFILE', ['data', 'user']),
+    ...mapGetters({
+      userGetter: PROFILE_GETTERS.GET_USER,
+    }),
 
-    dataIsAvailable() {
-      return true
+    userDetails(): any {
+      return {
+        displayName: this.userGetter?.username,
+        userId: this.userGetter?.userId,
+      }
     },
   },
 
-  unmounted() {
-    console.log('Dashboard page got unmounted')
-  },
-
   mounted() {
-    console.log('Dashboard page mounted')
-    // this.JQL()
+    this.fetchUserAction()
+    this.showModal()
   },
 
   methods: {
-    // ...mapActions({
-    //   JQL: 'PROFILE/QUERY_JQL',
-    //   getUserData: 'PROFILE/GET_USER_DATA',
-    // }),
+    ...mapMutations({
+      setModalStateMutation: INDEX_MUTATIONS.SET_MODAL_STATE,
+    }),
+
+    ...mapActions({
+      fetchUserAction: PROFILE_ACTIONS.FETCH_USER,
+    }),
 
     goToTicketRoute(issueId: string) {
       // TODO: Display error message in the UI
       if (!issueId) return
 
       this.$router.push({ path: `/${ROUTE_NAMES.ISSUE_PAGE}/${issueId}` })
+    },
+
+    showModal(): void {
+      this.setModalStateMutation(true)
     },
   },
 })

@@ -9,8 +9,8 @@
       @keyup="onInputKeyUp"
     />
 
-    <c-button primary @clicked="goToTicket()"> Søg Jira </c-button>
-    <c-button primary @clicked="goToOverview()"> My overview </c-button>
+    <c-button primary @clicked="goToTicket()">Søg Jira</c-button>
+    <c-button primary @clicked="goToOverview()">My dashboard</c-button>
   </div>
 </template>
 

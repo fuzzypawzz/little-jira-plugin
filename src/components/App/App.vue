@@ -1,66 +1,57 @@
 <template>
   <div>
-    <lj-navigation-bar></lj-navigation-bar>
-    <router-view></router-view>
+    <lj-navigation-bar />
 
-    <!-- REMOVE THE MODAL STATE STATE IF ITS NO REQURIED -->
-    <!-- <c-modal
-      v-if="showModal && !apiError.hasError"
-      @close-click="toggleModalState(false)"
+    <c-modal
+      v-show="showModal && !apiError.hasError"
+      @close-click="closeClickHandler()"
     >
       <router-view></router-view>
-    </c-modal> -->
+    </c-modal>
 
-    <!-- Error should be removed when next request is successful, not only on click here -->
-    <!-- Tried loading ticket, then loading not existing ticket, and then loading ticket again,
-    and the error modal is still visible, because api error state is not cleared -->
-    <!-- <c-modal v-if="apiError.hasError" small @close-click="removeApiError">
+    <!-- TODO: Move error handling to error page -->
+    <c-modal v-if="apiError.hasError" small @close-click="closeClickHandler()">
       <p>{{ apiError.message }}</p>
-    </c-modal> -->
+    </c-modal>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import LjNavigationBar from "@/components/Organisms/navigation-bar/lj-navigation-bar.vue";
+import LjNavigationBar from '@/components/Organisms/navigation-bar/lj-navigation-bar.vue'
+import CModal from '@/components/Organisms/CModal/CModal.vue'
 
-import { mapState, mapMutations, mapActions } from "vuex";
+import { mapState, mapMutations } from 'vuex'
+import { MUTATIONS as INDEX_MUTATIONS } from '@/store'
 
 export default defineComponent({
-  name: "App",
-  components: { LjNavigationBar },
-  data() {
-    return {
-      contentContext: undefined,
-    };
-  },
+  name: 'App',
+
+  components: { LjNavigationBar, CModal },
 
   computed: {
-    // ...mapState(["showModal", "apiError"]),
-    // ...mapState("PROFILE", ["user"]),
-
-    isReady() {
-      return true
-    },
-  },
-
-  created() {
-    // if (!this.user) this.getUserData();
+    ...mapState(['showModal', 'apiError']),
   },
 
   methods: {
-    // ...mapMutations({
-    //   toggleModalState: "SET_MODAL_STATE",
-    //   removeApiError: "REMOVE_API_ERROR",
-    // }),
+    ...mapMutations({
+      setModalStateMutation: INDEX_MUTATIONS.SET_MODAL_STATE,
+    }),
 
-    // ...mapActions({
-    //   // getUserData: "PROFILE/GET_USER_DATA",
-    // }),
+    closeClickHandler(): void {
+      this.hideModal()
+      this.navigateToRoot()
+    },
+
+    navigateToRoot(): void {
+      // TODO: Fix this warning: [Vue Router warn]: No match found for location with path "/"
+      this.$router.push({ path: '/' })
+    },
+
+    hideModal(): void {
+      this.setModalStateMutation(false)
+    },
   },
-});
+})
 </script>
-
-<style>
-</style>

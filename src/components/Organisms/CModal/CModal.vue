@@ -6,8 +6,9 @@
     >
       <article class="c-modal__header">
         <div class="c-modal__bar">{{ title }}</div>
-        <c-button @clicked="close">Close</c-button>
+        <c-button @clicked="emitCloseClickEvent()">Close</c-button>
       </article>
+
       <article class="c-modal__body">
         <slot />
       </article>
@@ -16,17 +17,17 @@
 </template>
 
 <script>
-import CButton from "@/components/Atoms/CButton/Cbutton.vue";
+import CButton from '@/components/Atoms/CButton/Cbutton.vue'
 
-import { mapState } from "vuex";
+import { mapState } from 'vuex'
 
 export default {
-  name: "CModal",
+  name: 'CModal',
   components: { CButton },
   data() {
     return {
       visible: true,
-    };
+    }
   },
 
   props: {
@@ -37,25 +38,19 @@ export default {
   },
 
   computed: {
-    ...mapState(["showModal"]),
+    ...mapState(['showModal']),
 
     title() {
-      return browser.i18n.getMessage("extName");
+      return browser.i18n.getMessage('extName')
     },
-  },
-
-  beforeUnmount() {
-    console.log("Modal got unmounted.");
   },
 
   methods: {
-    close() {
-      this.$router.push({ path: "/" });
-      // TODO: Maybe this is not required when the router controls
-      this.$emit("close-click");
+    emitCloseClickEvent() {
+      this.$emit('close-click')
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>
