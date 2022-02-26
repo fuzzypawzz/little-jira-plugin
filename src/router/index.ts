@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import TOverview from '@/components/Templates/TOverview.vue'
-import Ticket from '@/components/Templates/Ticket.vue'
+import Ticket from '@/components/Templates/TTicket.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {

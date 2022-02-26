@@ -1,6 +1,6 @@
 export default {
-  install(Vue, store) {
-    const backgroundPort = browser.runtime.connect({
+  install(app: any, options: any) {
+    const backgroundPort = browser.runtime.connect(undefined, {
       name: "primary-port",
     });
 
@@ -24,6 +24,7 @@ export default {
       }
     });
 
+    // TODO: Convert to vue 3
     Vue.prototype.$port = backgroundPort;
   },
 };
