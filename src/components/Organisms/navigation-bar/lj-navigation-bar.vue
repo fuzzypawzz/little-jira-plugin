@@ -17,13 +17,16 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
+import { PREFIXES as PREFIX_ENUMS } from '@/constants/prefixes'
+
 export default defineComponent({
-  name: 'lj-navigation-bar',
+  name: `lj-navigation-bar`,
 
   data() {
     return {
       // TODO: Remove this before deploying
       inputValue: 'TSS-1220',
+      prefix: PREFIX_ENUMS.APP_PREFIX,
     }
   },
 
@@ -37,13 +40,13 @@ export default defineComponent({
     goToTicket() {
       if (!this.inputValue) return
 
-      this.$router.push({ path: `/ticket/${this.inputValue}` })
+      this.$router.push({ path: `/${this.prefix}issuepage/${this.inputValue}` })
     },
 
     goToOverview() {
       if (!this.inputValue) return
 
-      this.$router.push({ path: '/overview/' })
+      this.$router.push({ path: `/${this.prefix}overview/` })
     },
 
     // TODO: type events
