@@ -22,7 +22,7 @@ export const ACTIONS = {
 };
 
 const defaultState: State = {
-  showModal: false,
+  showModal: true,
   apiError: {
     hasError: false,
     message: undefined,

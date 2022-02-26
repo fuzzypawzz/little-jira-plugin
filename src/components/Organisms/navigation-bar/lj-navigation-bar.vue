@@ -19,6 +19,8 @@ import { defineComponent } from 'vue'
 
 import { PREFIXES as PREFIX_ENUMS } from '@/constants/prefixes'
 
+import { ROUTE_NAMES } from '@/router'
+
 export default defineComponent({
   name: `lj-navigation-bar`,
 
@@ -40,13 +42,13 @@ export default defineComponent({
     goToTicket() {
       if (!this.inputValue) return
 
-      this.$router.push({ path: `/${this.prefix}issuepage/${this.inputValue}` })
+      this.$router.push({ path: `/${this.prefix}${ROUTE_NAMES.ISSUE_PAGE}/${this.inputValue}` })
     },
 
     goToOverview() {
       if (!this.inputValue) return
 
-      this.$router.push({ path: `/${this.prefix}overview/` })
+      this.$router.push({ path: `/${this.prefix}${ROUTE_NAMES.DASHBOARD_PAGE}/` })
     },
 
     // TODO: type events

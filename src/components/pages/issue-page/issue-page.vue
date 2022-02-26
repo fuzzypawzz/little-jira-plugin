@@ -1,5 +1,5 @@
 <template>
-  <c-modal>
+  <!-- <c-modal>
     <span>{{ meta.key }}</span> <span>(Created on: {{ meta.created }})</span>
     <h2 class="no-margin">{{ summary }}</h2>
     <br />
@@ -103,7 +103,8 @@
         </tbody>
       </table>
     </div>
-  </c-modal>
+  </c-modal> -->
+  <p>Issue page</p>
 </template>
 
 <script>
@@ -138,7 +139,7 @@ export default {
     ]),
 
     editIssueLink() {
-      return `secure/EditIssue!default.jspa?id=${this.meta.id}`;
+      return `secure/EditIssue!default.jspa?id=${this.meta?.id}`;
     },
   },
 
@@ -147,26 +148,26 @@ export default {
   },
 
   created() {
-    this.loadIssue();
+    // this.loadIssue();
   },
 
   mounted() {
     console.log("Ticket mounted");
   },
 
-  beforeRouteUpdate(to, from, next) {
-    this.loadIssue(to.params.issueId);
-    next();
-  },
+  // beforeRouteUpdate(to, from, next) {
+  //   this.loadIssue(to.params.issueId);
+  //   next();
+  // },
 
   methods: {
-    ...mapActions({
-      getIssue: "ISSUE/GET_ISSUE",
-    }),
+    // ...mapActions({
+    //   getIssue: "ISSUE/GET_ISSUE",
+    // }),
 
-    loadIssue(id) {
-      this.getIssue(id ?? this.$route.params.issueId);
-    },
+    // loadIssue(id) {
+    //   this.getIssue(id ?? this.$route.params.issueId);
+    // },
 
     createBrowseUrl(key) {
       return `/browse/${key}/`;

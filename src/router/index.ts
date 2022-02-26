@@ -5,14 +5,20 @@ import IssuePage from '@/components/pages/issue-page/issue-page.vue'
 
 import { PREFIXES } from '@/constants/prefixes'
 
+export enum ROUTE_NAMES {
+  DASHBOARD_PAGE = 'dashboardpage',
+  ISSUE_PAGE = 'issuepage',
+}
+
 const prefix = PREFIXES.APP_PREFIX
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: `/${prefix}dashboardpage`,
+    path: `/${prefix}${ROUTE_NAMES.DASHBOARD_PAGE}`,
     name: 'DashboardPage',
     component: DashboardPage,
   },
+  // TODO: Remove this when i have investigated whether lazy loading is intersting for this app
   // {
   //   path: '/about',
   //   name: 'about',
@@ -23,7 +29,7 @@ const routes: Array<RouteRecordRaw> = [
   //     import(/* webpackChunkName: "about" */ '../views/AboutView.vue'),
   // },
   {
-    path: `/${prefix}issuepage`,
+    path: `/${prefix}${ROUTE_NAMES.ISSUE_PAGE}/:issueId`,
     name: 'IssuePage',
     component: IssuePage,
   },

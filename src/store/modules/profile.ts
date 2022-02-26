@@ -30,18 +30,18 @@ export default {
 
   actions: {
     [ACTIONS.FETCH_USER]({ commit }: any, issueId: string) {
-      function getUser() {}
+      // function getUser() {}
 
-      getUser
-        .then((response) => {
-          if (response.key) {
-            // Send response to background so it can be added to the store
-            this._vm.$port.postMessage({ userData: response });
-          } else throw new Error(response.errorMessages[0]);
-        })
-        .catch((error: any) => {
-          console.error(error);
-        });
+      // getUser
+      //   .then((response) => {
+      //     if (response.key) {
+      //       // Send response to background so it can be added to the store
+      //       this._vm.$port.postMessage({ userData: response });
+      //     } else throw new Error(response.errorMessages[0]);
+      //   })
+      //   .catch((error: any) => {
+      //     console.error(error);
+      //   });
     },
   },
 };

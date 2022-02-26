@@ -45,13 +45,13 @@ export default {
   },
 
   beforeUnmount() {
-    console.log("Modal got destroyed.");
+    console.log("Modal got unmounted.");
   },
 
   methods: {
     close() {
       this.$router.push({ path: "/" });
-      // Maybe this is not required when the router controls
+      // TODO: Maybe this is not required when the router controls
       this.$emit("close-click");
     },
   },
