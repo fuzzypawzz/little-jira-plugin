@@ -1,4 +1,5 @@
 const { defineConfig } = require("@vue/cli-service");
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = defineConfig({
   chainWebpack: (config) => {
@@ -7,13 +8,25 @@ module.exports = defineConfig({
       return options;
     });
 
-		/**
-		 * Disable chunk splitting. This is necessary since auto-reload
-		 * would not trigger on chunks - so we would not see updates on
-		 * component level.
-		 * Source: https://medium.com/@johannes.lauter/building-a-vue-browser-extension-including-tailwind-848e0e451f50
-		 */
+    /**
+     * Disable chunk splitting. This is necessary since auto-reload
+     * would not trigger on chunks - so we would not see updates on
+     * component level.
+     * Source: https://medium.com/@johannes.lauter/building-a-vue-browser-extension-including-tailwind-848e0e451f50
+     */
     config.optimization.delete("splitChunks");
+  },
+
+  configureWebpack: {
+    plugins: [
+      new CopyPlugin({
+        patterns: [
+          {
+            from: "node_modules/webextension-polyfill/dist/browser-polyfill.js",
+          },
+        ],
+      }),
+    ],
   },
 
   css: {

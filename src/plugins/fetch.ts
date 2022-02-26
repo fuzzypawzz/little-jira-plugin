@@ -1,9 +1,11 @@
+import content from 'webextension-polyfill'
+
 type Fetch = (params: { [index: string]: any }) => Promise<any>;
 
 export default {
   install: (app: any, options: any) => {
     // eslint-disable-next-line no-undef
-    const _browserSpecificFetch = content.fetch ?? fetch;
+    const _browserSpecificFetch = (content as any).fetch ?? fetch;
 
     app.config.globalProperties.$fetch = (
       url: string,

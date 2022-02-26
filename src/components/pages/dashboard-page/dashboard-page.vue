@@ -55,8 +55,8 @@ export default defineComponent({
 
     userDetails(): any {
       return {
-        displayName: this.userGetter?.username,
-        userId: this.userGetter?.userId,
+        displayName: this.userGetter?.displayName,
+        userId: this.userGetter?.name,
       }
     },
   },
