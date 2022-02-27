@@ -4,12 +4,17 @@
     <h4>Hi {{ userDetails.displayName }} ({{ userDetails.userId }})</h4>
 
     <!-- TODO: This content should come from somewhere -->
-    <p>These issues are assigned to you:</p>
+    <p>These {{ dashboardData.totalIssues }} issues are assigned to you:</p>
 
     <table class="aui">
       <tbody>
-        <tr v-for="issue in data.issues" :key="issue.id">
-          <td headers="basic-fname">{{ issue.key }}</td>
+        <tr v-for="issue in dashboardData.issues" :key="issue.id">
+          <td headers="basic-fname">
+            <div style="max-width: 500px;">
+              <p>{{ issue.key }}</p>
+              <p>{{ issue.fields.summary }}</p>
+            </div>
+          </td>
 
           <td headers="basic-fname">{{ issue.fields.status.name }}</td>
 
@@ -51,6 +56,7 @@ export default defineComponent({
   computed: {
     ...mapGetters({
       userGetter: PROFILE_GETTERS.GET_USER,
+      jqlSearchResultGetter: PROFILE_GETTERS.GET_JQL_SEARCH_RESULT,
     }),
 
     userDetails(): any {
@@ -59,10 +65,38 @@ export default defineComponent({
         userId: this.userGetter?.name,
       }
     },
+
+    dashboardData(): {
+      issues: [{ [index: number]: any }]
+      totalIssues: number | undefined
+    } {
+      const data = this.jqlSearchResultGetter
+      const issues: any[] = data?.issues ?? []
+      const failSafeDataMap: any = issues.map((x: any) => {
+        return {
+          ...x,
+          fields: {
+            ...x.fields,
+            assignee: {
+              ...x.fields?.assignee,
+            },
+            status: {
+              ...x.fields?.status,
+            },
+          },
+        }
+      })
+
+      return {
+        issues: failSafeDataMap,
+        totalIssues: data?.total,
+      }
+    },
   },
 
   mounted() {
     this.fetchUserAction()
+    this.jiraJQLRequest()
     this.showModal()
   },
 
@@ -73,6 +107,7 @@ export default defineComponent({
 
     ...mapActions({
       fetchUserAction: PROFILE_ACTIONS.FETCH_USER,
+      fetchDataWithJqlAction: PROFILE_ACTIONS.FETCH_DATA_WITH_JQL,
     }),
 
     goToTicketRoute(issueId: string) {
@@ -80,6 +115,13 @@ export default defineComponent({
       if (!issueId) return
 
       this.$router.push({ path: `/${ROUTE_NAMES.ISSUE_PAGE}/${issueId}` })
+    },
+
+    jiraJQLRequest() {
+      const fields = ['summary', 'assignee', 'status']
+      const jql = `assignee = jty4336 AND status NOT IN ('CLOSED', 'DONE', 'CANCELLED') ORDER BY PROJECT ASC`
+
+      this.fetchDataWithJqlAction({ fields, jql })
     },
 
     showModal(): void {

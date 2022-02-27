@@ -10,7 +10,11 @@ export const ACTIONS = {
   FETCH_ISSUE: "FETCH_ISSUE",
 };
 
-export default {
+// TODO: Fix issue with store module typings
+// Can not get this this to work without using any here
+const issueStore: any = {
+  // namespaced: true,
+
   state: (): State => ({
     data: [],
   }),
@@ -27,3 +31,5 @@ export default {
     },
   },
 };
+
+export default issueStore

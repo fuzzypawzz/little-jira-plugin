@@ -3,7 +3,7 @@ import { createStore } from "vuex";
 import issue from "@/store/modules/issue";
 import profile from "@/store/modules/profile";
 
-type State = {
+export type RootState = {
   showModal: boolean;
   apiError: {
     hasError: boolean;
@@ -21,7 +21,7 @@ export const ACTIONS = {
   FETCH_ISSUE: "FETCH_ISSUE",
 };
 
-const defaultState: State = {
+const defaultState: RootState = {
   showModal: false,
   apiError: {
     hasError: false,
@@ -29,32 +29,38 @@ const defaultState: State = {
   },
 };
 
-export default createStore({
-  state(): State {
+const rootStore: any = createStore({
+  state(): RootState {
     return {
       ...defaultState,
     };
   },
 
   mutations: {
-    [MUTATIONS.SET_MODAL_STATE](state: State, value: boolean) {
+    [MUTATIONS.SET_MODAL_STATE](state: RootState, value: boolean) {
       state.showModal = Boolean(value);
     },
 
-    [MUTATIONS.SET_API_ERROR_STATE](state: State, message: string) {
+    [MUTATIONS.SET_API_ERROR_STATE](state: RootState, message: string) {
       state.apiError = {
         hasError: true,
         message: message,
       };
     },
 
-    [MUTATIONS.RESET_API_ERROR_STATE](state: State) {
+    [MUTATIONS.RESET_API_ERROR_STATE](state: RootState) {
       state.apiError = defaultState.apiError;
     },
   },
+
+  actions: {},
+
+  getters: {},
 
   modules: {
     issue,
     profile,
   },
 });
+
+export default rootStore
