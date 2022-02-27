@@ -93,12 +93,12 @@ const profileStore: any = {
         }),
       }
 
-      const response = await fetchAction(url, settings).then((response) =>
-        response.json()
-      )
-
-      console.log(response)
-      commit(MUTATIONS.SET_JQL_SEARCH_RESULTS, response)
+      return fetchAction(url, settings)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data)
+          commit(MUTATIONS.SET_JQL_SEARCH_RESULTS, data)
+        })
     },
   },
 

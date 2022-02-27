@@ -10,7 +10,7 @@
       <tbody>
         <tr v-for="issue in dashboardData.issues" :key="issue.id">
           <td headers="basic-fname">
-            <div style="max-width: 500px;">
+            <div>
               <p>{{ issue.key }}</p>
               <p>{{ issue.fields.summary }}</p>
             </div>
@@ -40,6 +40,8 @@ import {
   ACTIONS as PROFILE_ACTIONS,
 } from '@/store/modules/profile'
 
+import { PREFIXES as PREFIX_ENUMS } from '@/constants/prefixes'
+
 import { ROUTE_NAMES } from '@/router'
 
 export default defineComponent({
@@ -47,9 +49,8 @@ export default defineComponent({
 
   data() {
     return {
-      data: {
-        issues: [],
-      },
+      data: {},
+      prefix: PREFIX_ENUMS.APP_PREFIX,
     }
   },
 
@@ -67,19 +68,22 @@ export default defineComponent({
     },
 
     dashboardData(): {
-      issues: [{ [index: number]: any }]
+      issues: any[]
       totalIssues: number | undefined
     } {
       const data = this.jqlSearchResultGetter
       const issues: any[] = data?.issues ?? []
-      const failSafeDataMap: any = issues.map((x: any) => {
+      const failSafeDataMap: any[] = issues.map((x: any) => {
         return {
           ...x,
+          // Failsafe for nested object 'fields'
           fields: {
             ...x.fields,
+            // Failsafe for nested object inside fields 'assignee'
             assignee: {
               ...x.fields?.assignee,
             },
+            // Failsafe for nested object inside fields 'status'
             status: {
               ...x.fields?.status,
             },
@@ -94,8 +98,8 @@ export default defineComponent({
     },
   },
 
-  mounted() {
-    this.fetchUserAction()
+  async mounted() {
+    await this.fetchUserAction()
     this.jiraJQLRequest()
     this.showModal()
   },
@@ -114,12 +118,19 @@ export default defineComponent({
       // TODO: Display error message in the UI
       if (!issueId) return
 
-      this.$router.push({ path: `/${ROUTE_NAMES.ISSUE_PAGE}/${issueId}` })
+      this.$router.push({
+        path: `/${this.prefix}${ROUTE_NAMES.ISSUE_PAGE}/${issueId}`,
+      })
     },
 
     jiraJQLRequest() {
+      const userId = this.userDetails?.userId
+
+      // TODO: Handle errors
+      if (!userId) console.error('User id is not defined')
+
       const fields = ['summary', 'assignee', 'status']
-      const jql = `assignee = jty4336 AND status NOT IN ('CLOSED', 'DONE', 'CANCELLED') ORDER BY PROJECT ASC`
+      const jql = `assignee = ${userId} AND status NOT IN ('CLOSED', 'DONE', 'CANCELLED') ORDER BY PROJECT ASC`
 
       this.fetchDataWithJqlAction({ fields, jql })
     },
