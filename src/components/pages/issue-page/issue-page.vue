@@ -117,7 +117,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, render } from 'vue'
+import { defineComponent } from 'vue'
 
 import CLink from '@/components/Atoms/CLink/CLink.vue'
 
@@ -133,10 +133,7 @@ export default defineComponent({
   components: { CLink },
 
   data() {
-    return {
-      CModal: undefined,
-      networking: false,
-    }
+    return {}
   },
 
   computed: {
@@ -153,7 +150,7 @@ export default defineComponent({
       const renderedFields = issue?.renderedFields ?? {}
       const fields = issue?.fields ?? {}
 
-      const attachments = renderedFields?.attachment?.map((x: any) => {
+      const authorMapFailSafe = (x: any) => {
         return {
           ...x,
           author: {
@@ -163,19 +160,10 @@ export default defineComponent({
             },
           },
         }
-      })
+      }
 
-      const comments = renderedFields?.comment?.comments?.map((x: any) => {
-        return {
-          ...x,
-          author: {
-            ...x.author,
-            avatarUrls: {
-              ...x.author?.avatarUrls,
-            },
-          },
-        }
-      })
+      const attachments = renderedFields?.attachment?.map(authorMapFailSafe)
+      const comments = renderedFields?.comment?.comments?.map(authorMapFailSafe)
 
       return {
         id: issue.id,
@@ -206,11 +194,11 @@ export default defineComponent({
     this.showModal()
   },
 
-  beforeRouteUpdate(to, from, next) {
-    console.log(to)
-    this.loadIssue(to?.params?.issueId)
-    next()
-  },
+  // beforeRouteUpdate(to, from, next) {
+  //   console.log(to)
+  //   this.loadIssue(to?.params?.issueId)
+  //   next()
+  // },
 
   methods: {
     ...mapMutations({
