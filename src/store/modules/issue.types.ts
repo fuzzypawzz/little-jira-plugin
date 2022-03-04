@@ -1,35 +1,55 @@
-interface IJiraIssue {
+export declare type JiraIssue = {
   expand: string
   fields: Fields
   id: string
   key: string
   renderedFields?: RenderedFields
   self: string
+  // Must be asked for in 'expand'
+  names?: {
+    assignee: string
+    attachment: string
+    comment: string
+    created: string
+    description: string
+    issuelinks: string
+    issuetype: string
+    labels: string
+    priority: string
+    reporter: string
+    status: string
+    subtasks: string
+    summary: string
+    updated: string
+  }
 }
 
-declare type Fields = {
-  assignee: UserInfo
-  attachment: AttachmentEntry[]
-  comment: {
+declare type FieldsBase = {
+  issuelinks?: IssueLinkEntry[]
+  issuetype?: IssueType
+  status?: Status
+  summary?: string
+}
+
+declare type Fields = FieldsBase & {
+  assignee?: UserInfo | null
+  attachment?: AttachmentEntry[]
+  comment?: {
     comments: CommentEntry[]
     maxResults: number
     startAt: number
     total: number
   }
-  created: string
-  description: string
-  issuelinks: IssueLinkEntry[]
-  issuetype: IssueType
-  labels: string[]
-  priority: Priority
-  reporter: UserInfo
-  status: Status
-  subtasks: SubTaskEntry[]
-  summary: string
-  updated: string
+  created?: string
+  description?: string
+  labels?: string[]
+  priority?: Priority
+  reporter?: UserInfo
+  subtasks?: SubTaskEntry[] | []
+  updated?: string
 }
 
-declare type UserInfo = {
+export declare type UserInfo = {
   active: boolean
   avatarUrls: {
     '16x16': string
@@ -45,7 +65,7 @@ declare type UserInfo = {
   timeZone: string
 }
 
-declare type AttachmentEntry = {
+export declare type AttachmentEntry = {
   author: UserInfo
   content: string
   created: string
@@ -57,7 +77,7 @@ declare type AttachmentEntry = {
   thumbnail: string
 }
 
-declare type CommentEntry = {
+export declare type CommentEntry = {
   author: UserInfo
   body: string
   created: string
@@ -67,10 +87,10 @@ declare type CommentEntry = {
   updated: string
 }
 
-declare type IssueLinkEntry = {
+export declare type IssueLinkEntry = {
   id: string
   inwardIssue: {
-    fields: Pick<Fields, 'issuetype' | 'priority' | 'status' | 'summary'>
+    fields: FieldsBase
     id: string
     key: string
     self: string
@@ -85,7 +105,7 @@ declare type IssueLinkEntry = {
   }
 }
 
-declare type IssueType = {
+export declare type IssueType = {
   avatarId: string
   description: string
   iconUrl: string
@@ -95,14 +115,14 @@ declare type IssueType = {
   subtask: boolean
 }
 
-declare type Priority = {
+export declare type Priority = {
   iconUrl: string
   id: string
   name: string
   self: string
 }
 
-declare type Status = {
+export declare type Status = {
   description: string
   iconUrl: string
   id: string
@@ -117,11 +137,12 @@ declare type Status = {
   }
 }
 
-declare type SubTaskEntry = {
-  fields: Pick<Fields, 'issuetype' | 'priority' | 'status' | 'summary'>
+export declare type SubTaskEntry = {
+  fields: FieldsBase
   id: string
   key: string
   self: string
 }
 
-declare type RenderedFields = Partial<Fields>
+// TODO: This contains the keys from Fields, but the value types are different
+declare type RenderedFields = Fields
