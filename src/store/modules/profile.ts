@@ -58,7 +58,7 @@ const profileStore: any = {
   },
 
   actions: {
-    async [ACTIONS.FETCH_USER]({ commit }: any, issueId: string) {
+    async [ACTIONS.FETCH_USER]({ commit }: any) {
       const url = 'https://jira.atlassian.teliacompany.net/rest/api/2/myself'
       const settings = {
         method: 'GET',

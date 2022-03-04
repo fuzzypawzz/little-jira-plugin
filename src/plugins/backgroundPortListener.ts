@@ -1,10 +1,11 @@
 export default {
-  install(app: any, options: any) {
+  install(/* app: any, options: any */) {
     const backgroundPort = browser.runtime.connect(undefined, {
       name: "primary-port",
     });
 
     backgroundPort.onMessage.addListener((message) => {
+      console.log(message)
       /**
        * ISSUE DATA RECEIVED FROM BACKGROUND SCRIPT
        * Adds issue data to the store

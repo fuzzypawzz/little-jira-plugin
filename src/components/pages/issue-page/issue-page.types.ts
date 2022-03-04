@@ -9,6 +9,8 @@ import {
   AttachmentEntry,
 } from '@/store/modules/issue.types'
 
+declare type EmptyObject = Record<string, never>
+
 export interface IDestructuredIssueData {
   id: string
   key: string
@@ -19,11 +21,11 @@ export interface IDestructuredIssueData {
   attachments: AttachmentEntry[]
   comments: CommentEntry[]
   summary: string | undefined
-  issuetype: IssueType | {}
+  issuetype: IssueType | EmptyObject
   issuelinks: IssueLinkEntry[]
-  priority: Priority | {}
+  priority: Priority | EmptyObject
   labels: string[]
-  reporter: UserInfo | {}
+  reporter: UserInfo | EmptyObject
   subtasks: SubTaskEntry[]
-  status: Status | {}
+  status: Status | EmptyObject
 }

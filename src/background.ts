@@ -49,9 +49,9 @@ function handleUpdated(tabId: any, changeInfo: any, tab: any) {
 
 browser.runtime.onConnect.addListener(connected)
 // TODO: Get filter from storage
-const filter = {
-  urls: ['https://jira.atlassian.teliacompany.net/*'],
-}
+// const filter = {
+//   urls: ['https://jira.atlassian.teliacompany.net/*'],
+// }
 // TODO: Remove this and write a description that filters are not available
 // in chrome, so we need to check the url in the callback
 // Firefox: browser.tabs.onUpdated.addListener(handleUpdated, filter)
