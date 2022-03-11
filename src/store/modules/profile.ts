@@ -85,6 +85,13 @@ const profileStore: any = {
         mode: 'same-origin',
         cache: 'no-cache',
         headers: {
+          /**
+           * WORKAROUND
+           * Jira has a problem with the user-agent-string Mozilla/5.0..
+           * Read the issue on atlassian forums:
+           * https://community.atlassian.com/t5/Jira-questions/Jira-7-rest-api-XSRF-check-failed-for-post-issue-with/qaq-p/488706
+           */
+          'User-Agent': 'rubbish',
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -94,9 +101,10 @@ const profileStore: any = {
       }
 
       return fetchAction(url, settings)
-        .then((response) => response.json())
+        .then((response) => {
+          return response.json()
+        })
         .then((data) => {
-          console.log(data)
           commit(MUTATIONS.SET_JQL_SEARCH_RESULTS, data)
         })
     },
