@@ -17,17 +17,13 @@
       v-model="jql.value"
       placeholder="STATUS NOT IN ('CLOSED', 'DONE', 'CANCELLED')"
       id="overview-jql"
-    ></textarea>
-
-    <!-- <label>
-      <input type="checkbox" />
-      <span class="label-body">Only query issues assigned to you</span>
-    </label> -->
+    />
 
     <button @click.prevent="saveStorageData()" class="options__button">
       Save changes
     </button>
-    <p class="options__info-message" v-if="infoMessage">
+
+    <p v-if="infoMessage" class="options__info-message">
       {{ infoMessage }}
     </p>
   </div>
@@ -36,9 +32,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import { PREFIXES as PREFIX_ENUMS } from '@/constants/prefixes'
-
-declare type StorageItem = Record<string, any>
+import { LOCAL_STORAGE_KEYS } from '@/constants/storage'
 
 export default defineComponent({
   name: 'OptionsPageApp',
@@ -46,11 +40,11 @@ export default defineComponent({
   data() {
     return {
       jiraUrl: {
-        storageKey: `${PREFIX_ENUMS.APP_PREFIX}jiraUrl`,
+        storageKey: LOCAL_STORAGE_KEYS.JIRA_URL,
         value: '',
       },
       jql: {
-        storageKey: `${PREFIX_ENUMS.APP_PREFIX}jql`,
+        storageKey: LOCAL_STORAGE_KEYS.JQL,
         value: '',
       },
       infoMessage: '',

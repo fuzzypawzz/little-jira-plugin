@@ -33,7 +33,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import { mapMutations, mapGetters, mapActions } from 'vuex'
+import { mapMutations, mapGetters, mapActions, mapState } from 'vuex'
 import { MUTATIONS as INDEX_MUTATIONS } from '@/store'
 import {
   GETTERS as PROFILE_GETTERS,
@@ -55,6 +55,8 @@ export default defineComponent({
   },
 
   computed: {
+    ...mapState(['settings']),
+
     ...mapGetters({
       userGetter: PROFILE_GETTERS.GET_USER,
       jqlSearchResultGetter: PROFILE_GETTERS.GET_JQL_SEARCH_RESULT,
@@ -124,13 +126,8 @@ export default defineComponent({
     },
 
     jiraJQLRequest() {
-      const userId = this.userDetails?.userId
-
-      // TODO: Handle errors
-      if (!userId) console.error('User id is not defined')
-
       const fields = ['summary', 'assignee', 'status']
-      const jql = `assignee = ${userId} AND status NOT IN ('CLOSED', 'DONE', 'CANCELLED') ORDER BY PROJECT ASC`
+      const jql = this.settings.dashboardJql
 
       this.fetchDataWithJqlAction({ fields, jql })
     },

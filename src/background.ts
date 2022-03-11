@@ -1,6 +1,14 @@
 // import browser from 'webextension-polyfill'
+import { LOCAL_STORAGE_KEYS } from '@/constants/storage'
 
 let portFromCS: any
+let jiraUrl: ''
+
+// TODO: Handle errors and scenario where jiraUrl is not set
+// UI Should probably display an error if possible so early in the process.
+browser.storage.local.get([LOCAL_STORAGE_KEYS.JIRA_URL]).then((storageData) => {
+  jiraUrl = storageData[LOCAL_STORAGE_KEYS.JIRA_URL]
+})
 
 /**
  *
@@ -27,11 +35,9 @@ function connected(port: any) {
  * @param {object} tabInfo
  */
 function handleUpdated(tabId: any, changeInfo: any, tab: any) {
-  // TODO: Refactor this to be nicer and URL should come from settings
-  const url = 'jira.atlassian.teliacompany.net'
+  if (!jiraUrl) return
 
-  if (changeInfo?.status === 'complete' && tab?.url.includes(url)) {
-    console.log(tab)
+  if (changeInfo?.status === 'complete' && tab?.url.includes(jiraUrl)) {
     // TODO: Handle errors
     browser.tabs.insertCSS({
       file: '/css/content-script.css',

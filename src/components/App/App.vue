@@ -23,7 +23,9 @@ import LjNavigationBar from '@/components/Organisms/navigation-bar/lj-navigation
 import CModal from '@/components/Organisms/CModal/CModal.vue'
 
 import { mapState, mapMutations } from 'vuex'
-import { MUTATIONS as INDEX_MUTATIONS } from '@/store'
+import { MUTATIONS as INDEX_MUTATIONS, ISettings } from '@/store'
+
+import { LOCAL_STORAGE_KEYS } from '@/constants/storage'
 
 export default defineComponent({
   name: 'App',
@@ -31,13 +33,33 @@ export default defineComponent({
   components: { LjNavigationBar, CModal },
 
   computed: {
-    ...mapState(['showModal', 'apiError']),
+    ...mapState(['settings', 'showModal', 'apiError']),
+  },
+
+  created() {
+    this.updateSettingsFromStorage()
   },
 
   methods: {
     ...mapMutations({
       setModalStateMutation: INDEX_MUTATIONS.SET_MODAL_STATE,
+      setSettingsMutation: INDEX_MUTATIONS.SET_SETTINGS,
     }),
+
+    getLocalStorage: browser.storage.local.get,
+
+    updateSettingsFromStorage() {
+      const keys = [LOCAL_STORAGE_KEYS.JIRA_URL, LOCAL_STORAGE_KEYS.JQL]
+
+      this.getLocalStorage(keys).then((storageData) => {
+        const settings: ISettings = {
+          jiraUrl: storageData[LOCAL_STORAGE_KEYS.JIRA_URL],
+          dashboardJql: storageData[LOCAL_STORAGE_KEYS.JQL],
+        }
+
+        this.setSettingsMutation(settings)
+      })
+    },
 
     closeClickHandler(): void {
       this.hideModal()
