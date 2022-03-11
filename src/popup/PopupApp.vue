@@ -1,44 +1,29 @@
 <template>
   <div class="wrapper">
-    <p>Little Jira is installed and running.</p>
-    <p>Go to Jira to use it.</p>
+    <p>Little Jira Plugin is installed and running.</p>
+
+    <p>Navigate to Jira in your browser to use it.</p>
+
     <c-button class="button" @clicked="openOptions()">Settings</c-button>
-    <hr />
-    <c-button class="button" @clicked="startApp()">Start</c-button>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import CButton from "@/components/Atoms/CButton/Cbutton.vue";
+import CButton from '@/components/Atoms/CButton/Cbutton.vue'
 
 export default defineComponent({
-  name: "PopupApp",
+  name: 'PopupApp',
+
   components: { CButton },
-  mounted() {
-    this.startApp();
-  },
+
   methods: {
     openOptions() {
-      /* eslint-disable-next-line */
-      browser.runtime.openOptionsPage();
-    },
-
-    startApp() {
-      // browser.tabs.create({
-      //   url: "https://jira.atlassian.teliacompany.net/secure/Dashboard.jspa",
-      // });
-      // // DOCS: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/tabs/insertCSS
-      // browser.tabs.insertCSS({
-      //   file: "/css/content-script.css",
-      // });
-      // browser.tabs.executeScript({
-      //   file: "/js/content-script.js",
-      // });
+      browser.runtime.openOptionsPage()
     },
   },
-});
+})
 </script>
 
 <style lang="scss" scoped>

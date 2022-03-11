@@ -1,4 +1,3 @@
-// import browser from 'webextension-polyfill'
 import { LOCAL_STORAGE_KEYS } from '@/constants/storage'
 
 let portFromCS: any

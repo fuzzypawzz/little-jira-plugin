@@ -35,7 +35,7 @@ module.exports = defineConfig({
 
   pages: {
     popup: {
-      template: "public/browser-extension.html",
+      template: "./src/popup/popup.html",
       entry: "./src/popup/main.ts",
       title: "Popup",
     },
