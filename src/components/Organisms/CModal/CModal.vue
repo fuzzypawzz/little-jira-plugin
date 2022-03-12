@@ -64,34 +64,29 @@ export default {
   overflow: auto;
   background: rgba(78, 78, 78, 0.53);
 
-  // .c-modal__content
   &__content {
     background-color: #fefefe;
-    margin: 50px auto;
+    margin: 50px 20px;
     border: 4px solid #2c4a77;
     border-radius: 8px;
-    max-width: 900px;
 
-    // .c-modal__content--small-width
     &--small-width {
+      margin: 50px auto;
       width: min-content;
       min-width: 300px;
     }
   }
 
-  // .c-modal__header
   &__header {
     display: flex;
     justify-content: space-between;
     padding: 12px 12px 0;
   }
 
-  // .c-modal__body
   &__body {
     padding: 12px;
   }
 
-  // .c-modal__bar
   &__bar {
     margin: auto 0;
   }
