@@ -6,11 +6,15 @@
       v-show="showModal && !apiError.hasError"
       @close-click="closeClickHandler()"
     >
-      <router-view></router-view>
+      <router-view v-if="storageSettingsLoaded"></router-view>
     </c-modal>
 
     <!-- TODO: Move error handling to error page -->
-    <c-modal v-if="apiError.hasError" small @close-click="closeClickHandler()">
+    <c-modal
+      v-if="apiError.hasError"
+      small
+      @close-click="resetApiErrorStateMutation()"
+    >
       <p>{{ apiError.message }}</p>
     </c-modal>
   </div>
@@ -22,44 +26,54 @@ import { defineComponent } from 'vue'
 import LjNavigationBar from '@/components/Organisms/navigation-bar/lj-navigation-bar.vue'
 import CModal from '@/components/Organisms/CModal/CModal.vue'
 
-import { mapState, mapMutations } from 'vuex'
-import { MUTATIONS as INDEX_MUTATIONS, ISettings } from '@/store'
-
-import { LOCAL_STORAGE_KEYS } from '@/constants/storage'
+import { mapState, mapMutations, mapActions } from 'vuex'
+import {
+  MUTATIONS as INDEX_MUTATIONS,
+  ACTIONS as INDEX_ACTIONS,
+  ISettings,
+} from '@/store'
 
 export default defineComponent({
   name: 'App',
 
   components: { LjNavigationBar, CModal },
 
+  data() {
+    return {
+      storageSettingsLoaded: false,
+    }
+  },
+
   computed: {
-    ...mapState(['settings', 'showModal', 'apiError']),
+    ...mapState(['showModal', 'apiError']),
   },
 
   created() {
-    this.updateSettingsFromStorage()
+    this.updateSettingsFromStorageAction().then((settings: ISettings) => {
+      if (settings?.jiraUrl) {
+        this.storageSettingsLoaded = true
+      } else {
+        this.setApiErrorStateMutation(
+          `Your Jira settings was not loaded correctly.
+          Check if you have entered valid settings in the extension settings menu.
+          Little Jira Plugin won't work without a valid Jira server url.`
+        )
+      }
+    })
   },
 
   methods: {
     ...mapMutations({
       setModalStateMutation: INDEX_MUTATIONS.SET_MODAL_STATE,
       setSettingsMutation: INDEX_MUTATIONS.SET_SETTINGS,
+      setApiErrorStateMutation: INDEX_MUTATIONS.SET_API_ERROR_STATE,
+      resetApiErrorStateMutation: INDEX_MUTATIONS.RESET_API_ERROR_STATE,
     }),
 
-    getLocalStorage: browser.storage.local.get,
-
-    updateSettingsFromStorage() {
-      const keys = [LOCAL_STORAGE_KEYS.JIRA_URL, LOCAL_STORAGE_KEYS.JQL]
-
-      this.getLocalStorage(keys).then((storageData) => {
-        const settings: ISettings = {
-          jiraUrl: storageData[LOCAL_STORAGE_KEYS.JIRA_URL],
-          dashboardJql: storageData[LOCAL_STORAGE_KEYS.JQL],
-        }
-
-        this.setSettingsMutation(settings)
-      })
-    },
+    ...mapActions({
+      updateSettingsFromStorageAction:
+        INDEX_ACTIONS.UPDATE_SETTINGS_FROM_STORAGE,
+    }),
 
     closeClickHandler(): void {
       this.hideModal()

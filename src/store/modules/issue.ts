@@ -35,6 +35,7 @@ const issueStore: any = {
 
   actions: {
     [ACTIONS.FETCH_ISSUE]({ commit, rootState }: any, issueId: string) {
+      // TODO: Get urls from central place
       const url = `${rootState?.settings?.jiraUrl}/rest/api/2/issue`
       const settings = {
         method: 'GET',
@@ -73,7 +74,6 @@ const issueStore: any = {
       return fetchAction(contructedUrl, settings)
         .then((response) => response.json())
         .then((data: JiraIssue) => {
-          console.log(data)
           commit(MUTATIONS.ADD_ISSUE_DATA, data)
         })
     },

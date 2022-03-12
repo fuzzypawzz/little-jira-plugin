@@ -4,7 +4,6 @@ import App from "@/components/App/App.vue";
 import CButton from "@/components/Atoms/CButton/Cbutton.vue";
 import store from "@/store";
 import router from "@/router";
-import portListenerPlugin from "@/plugins/backgroundPortListener";
 import fetchPlugin from '@/plugins/fetch';
 
 try {
@@ -26,7 +25,6 @@ try {
 
     createApp(App)
       .component("c-button", CButton)
-      .use(portListenerPlugin)
       .use(fetchPlugin)
       .use(store)
       .use(router)

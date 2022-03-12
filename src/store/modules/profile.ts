@@ -59,6 +59,7 @@ const profileStore: any = {
 
   actions: {
     async [ACTIONS.FETCH_USER]({ commit, rootState }: any) {
+      // TODO: Get urls from a central place
       const url = `${rootState?.settings?.jiraUrl}/rest/api/2/myself`
       const settings = {
         method: 'GET',
@@ -69,7 +70,6 @@ const profileStore: any = {
         },
       }
 
-      // TODO: Get url from settings
       const response = await fetchAction(url, settings).then((response) =>
         response.json()
       )
@@ -77,7 +77,11 @@ const profileStore: any = {
       commit(MUTATIONS.SET_USER_DATA, response)
     },
 
-    async [ACTIONS.FETCH_DATA_WITH_JQL]({ commit, rootState }: any, { fields, jql }: any) {
+    async [ACTIONS.FETCH_DATA_WITH_JQL](
+      { commit, rootState }: any,
+      { fields, jql }: any
+    ) {
+      // TODO: Get urls from a central place
       const url = `${rootState?.settings?.jiraUrl}/rest/api/2/search`
       const settings = {
         method: 'POST',
@@ -104,7 +108,6 @@ const profileStore: any = {
           return response.json()
         })
         .then((data) => {
-          console.log(data)
           commit(MUTATIONS.SET_JQL_SEARCH_RESULTS, data)
         })
     },

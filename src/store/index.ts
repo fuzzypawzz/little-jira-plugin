@@ -3,7 +3,9 @@ import { createStore } from 'vuex'
 import issue from '@/store/modules/issue'
 import profile from '@/store/modules/profile'
 
-export type RootState = {
+import { LOCAL_STORAGE_KEYS } from '@/constants/storage'
+
+type RootState = {
   settings: ISettings
   showModal: boolean
   apiError: {
@@ -25,7 +27,7 @@ export const MUTATIONS = {
 }
 
 export const ACTIONS = {
-  FETCH_ISSUE: 'FETCH_ISSUE',
+  UPDATE_SETTINGS_FROM_STORAGE: 'UPDATE_SETTINGS_FROM_STORAGE',
 }
 
 const defaultState: RootState = {
@@ -71,9 +73,26 @@ const rootStore: any = createStore({
     },
   },
 
-  actions: {},
+  actions: {
+    [ACTIONS.UPDATE_SETTINGS_FROM_STORAGE]({ commit, state }: any) {
+      const keys = [LOCAL_STORAGE_KEYS.JIRA_URL, LOCAL_STORAGE_KEYS.JQL]
 
-  getters: {},
+      return new Promise((resolve, reject) => {
+        browser.storage.local
+          .get(keys)
+          .then((storageData) => {
+            const settings: ISettings = {
+              jiraUrl: storageData[LOCAL_STORAGE_KEYS.JIRA_URL],
+              dashboardJql: storageData[LOCAL_STORAGE_KEYS.JQL],
+            }
+
+            commit(MUTATIONS.SET_SETTINGS, settings)
+            resolve(state.settings)
+          })
+          .catch((error) => reject(error))
+      })
+    },
+  },
 
   modules: {
     issue,
