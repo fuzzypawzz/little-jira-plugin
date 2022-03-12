@@ -11,6 +11,10 @@ import {
 
 declare type EmptyObject = Record<string, never>
 
+declare type EnrichedStatus = Status & {
+  lozengeStyle?: string
+}
+
 export interface IDestructuredIssueData {
   id: string
   key: string
@@ -27,5 +31,5 @@ export interface IDestructuredIssueData {
   labels: string[]
   reporter: UserInfo | EmptyObject
   subtasks: SubTaskEntry[]
-  status: Status | EmptyObject
+  status: Partial<EnrichedStatus>
 }

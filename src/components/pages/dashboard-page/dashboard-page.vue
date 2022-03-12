@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="dashboard">
     <!-- TODO: This content should come from somewhere -->
     <h4>Hi {{ userDetails.displayName }} ({{ userDetails.userId }})</h4>
 
@@ -21,10 +21,21 @@
           <td headers="basic-fname">{{ issue.key }}</td>
 
           <td headers="basic-fname">
-            {{ issue.fields.summary }}
+            <span
+              class="aui-lozenge aui-lozenge-subtle"
+              :class="issue.fields.status.lozengeStyle"
+            >
+              {{ issue.fields.status.name }}
+            </span>
           </td>
 
-          <td headers="basic-fname">{{ issue.fields.status.name }}</td>
+          <td headers="basic-fname">
+            <a
+              class="dashboard__link"
+              @click.prevent="goToTicketRoute(issue.id)"
+              >{{ issue.fields.summary }}</a
+            >
+          </td>
         </tr>
       </tbody>
     </table>
@@ -41,6 +52,8 @@ import {
   ACTIONS as PROFILE_ACTIONS,
 } from '@/store/modules/profile'
 
+import { getLozengeStyle } from '@/helpers/ui'
+
 import { PREFIXES as PREFIX_ENUMS } from '@/constants/prefixes'
 
 import { ROUTE_NAMES } from '@/router'
@@ -53,55 +66,6 @@ export default defineComponent({
       data: {},
       prefix: PREFIX_ENUMS.APP_PREFIX,
     }
-  },
-
-  computed: {
-    ...mapState(['settings']),
-
-    ...mapGetters({
-      userGetter: PROFILE_GETTERS.GET_USER,
-      jqlSearchResultGetter: PROFILE_GETTERS.GET_JQL_SEARCH_RESULT,
-    }),
-
-    userDetails(): any {
-      return {
-        displayName: this.userGetter?.displayName,
-        userId: this.userGetter?.name,
-      }
-    },
-
-    dashboardData(): {
-      issues: any[]
-      totalIssues: number | undefined
-    } {
-      const data = this.jqlSearchResultGetter
-      const issues: any[] = data?.issues ?? []
-      const failSafeDataMap: any[] = issues.map((x: any) => {
-        return {
-          ...x,
-          // Failsafe for nested object 'fields'
-          fields: {
-            ...x.fields,
-            // Failsafe for nested object inside fields 'assignee'
-            assignee: {
-              ...x.fields?.assignee,
-            },
-            // Failsafe for nested object inside fields 'status'
-            status: {
-              ...x.fields?.status,
-            },
-            issuetype: {
-              ...x.fields?.issuetype,
-            },
-          },
-        }
-      })
-
-      return {
-        issues: failSafeDataMap,
-        totalIssues: data?.total,
-      }
-    },
   },
 
   async mounted() {
@@ -140,10 +104,70 @@ export default defineComponent({
       this.setModalStateMutation(true)
     },
   },
+
+  computed: {
+    ...mapState(['settings']),
+
+    ...mapGetters({
+      userGetter: PROFILE_GETTERS.GET_USER,
+      jqlSearchResultGetter: PROFILE_GETTERS.GET_JQL_SEARCH_RESULT,
+    }),
+
+    userDetails(): any {
+      return {
+        displayName: this.userGetter?.displayName,
+        userId: this.userGetter?.name,
+      }
+    },
+
+    dashboardData(): {
+      issues: any[]
+      totalIssues: number | undefined
+    } {
+      const data = this.jqlSearchResultGetter
+      const issues: any[] = data?.issues ?? []
+      const failSafeDataMap: any[] = issues.map((x: any) => {
+        return {
+          ...x,
+          // Failsafe for nested object 'fields'
+          fields: {
+            ...x.fields,
+            // Failsafe for nested object inside fields 'assignee'
+            assignee: {
+              ...x.fields?.assignee,
+            },
+            // Failsafe for nested object inside fields 'status'
+            status: {
+              ...x.fields?.status,
+              lozengeStyle: getLozengeStyle(
+                x.fields?.status?.statusCategory?.colorName
+              ),
+            },
+            issuetype: {
+              ...x.fields?.issuetype,
+            },
+          },
+        }
+      })
+
+      return {
+        issues: failSafeDataMap,
+        totalIssues: data?.total,
+      }
+    },
+  },
 })
 </script>
 
 <style lang="scss" scoped>
+.dashboard {
+  &__link {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
 .align-right {
   text-align: right;
 }

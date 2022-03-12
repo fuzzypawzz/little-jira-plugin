@@ -34,7 +34,7 @@
         <tr>
           <td headers="basic-fname">Current status</td>
           <td headers="basic-lname">
-            <span class="aui-lozenge aui-lozenge-success">
+            <span class="aui-lozenge" :class="issueData.status.lozengeStyle">
               {{ issueData.status.name }}
             </span>
           </td>
@@ -99,7 +99,14 @@
             </td>
             <td headers="basic-fname">{{ subtask.key }}</td>
             <td headers="basic-lname">
-              <span class="aui-lozenge aui-lozenge-subtle">
+              <span
+                class="aui-lozenge aui-lozenge-subtle"
+                :class="
+                  getLozengeStyle(
+                    subtask.fields.status.statusCategory.colorName
+                  )
+                "
+              >
                 {{ subtask.fields.status.name }}
               </span>
             </td>
@@ -127,6 +134,8 @@ import {
   ACTIONS as ISSUE_ACTIONS,
   GETTERS as ISSUE_GETTERS,
 } from '@/store/modules/issue'
+
+import { getLozengeStyle } from '@/helpers/ui'
 
 import { JiraIssue } from '@/store/modules/issue.types'
 import { IDestructuredIssueData } from './issue-page.types'
@@ -164,7 +173,12 @@ export default defineComponent({
         labels: fields?.labels ?? [],
         reporter: fields?.reporter ?? {},
         subtasks: fields?.subtasks ?? [],
-        status: fields?.status ?? {},
+        status: {
+          ...fields?.status,
+          lozengeStyle: getLozengeStyle(
+            fields?.status?.statusCategory?.colorName
+          ),
+        },
       }
     },
   },
@@ -182,6 +196,8 @@ export default defineComponent({
     ...mapActions({
       fetchIssueAction: ISSUE_ACTIONS.FETCH_ISSUE,
     }),
+
+    getLozengeStyle,
 
     showModal() {
       this.setModalStateMutation(true)
