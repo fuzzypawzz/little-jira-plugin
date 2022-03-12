@@ -34,8 +34,8 @@ const issueStore: any = {
   },
 
   actions: {
-    [ACTIONS.FETCH_ISSUE]({ commit }: any, issueId: string) {
-      const url = 'https://jira.atlassian.teliacompany.net/rest/api/2/issue'
+    [ACTIONS.FETCH_ISSUE]({ commit, rootState }: any, issueId: string) {
+      const url = `${rootState?.settings?.jiraUrl}/rest/api/2/issue`
       const settings = {
         method: 'GET',
         mode: 'same-origin',

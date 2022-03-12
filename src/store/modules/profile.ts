@@ -58,8 +58,8 @@ const profileStore: any = {
   },
 
   actions: {
-    async [ACTIONS.FETCH_USER]({ commit }: any) {
-      const url = 'https://jira.atlassian.teliacompany.net/rest/api/2/myself'
+    async [ACTIONS.FETCH_USER]({ commit, rootState }: any) {
+      const url = `${rootState?.settings?.jiraUrl}/rest/api/2/myself`
       const settings = {
         method: 'GET',
         mode: 'same-origin',
@@ -77,8 +77,8 @@ const profileStore: any = {
       commit(MUTATIONS.SET_USER_DATA, response)
     },
 
-    async [ACTIONS.FETCH_DATA_WITH_JQL]({ commit }: any, { fields, jql }: any) {
-      const url = 'https://jira.atlassian.teliacompany.net/rest/api/2/search'
+    async [ACTIONS.FETCH_DATA_WITH_JQL]({ commit, rootState }: any, { fields, jql }: any) {
+      const url = `${rootState?.settings?.jiraUrl}/rest/api/2/search`
       const settings = {
         method: 'POST',
         mode: 'same-origin',
