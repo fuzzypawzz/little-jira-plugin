@@ -4,6 +4,10 @@ const CopyPlugin = require("copy-webpack-plugin");
 module.exports = defineConfig({
   chainWebpack: (config) => {
     config.plugin("extract-css").tap((options) => {
+      /**
+       * Ensures consistent css file naming in output.
+       * For example dist/css/popup.css instead of popup3489023.css
+       */
       options[0].filename = "css/[name].css";
       return options;
     });

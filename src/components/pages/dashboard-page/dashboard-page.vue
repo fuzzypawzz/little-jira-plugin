@@ -6,7 +6,7 @@
     <!-- TODO: This content should come from somewhere -->
     <p>These {{ dashboardData.totalIssues }} issues are assigned to you:</p>
 
-    <table class="aui">
+    <table class="aui aui-table-list">
       <tbody>
         <tr v-for="issue in dashboardData.issues" :key="issue.id">
           <td headers="basic-fname">
