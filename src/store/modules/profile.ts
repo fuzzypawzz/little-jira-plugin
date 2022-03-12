@@ -74,7 +74,6 @@ const profileStore: any = {
         response.json()
       )
 
-      console.log(response)
       commit(MUTATIONS.SET_USER_DATA, response)
     },
 
@@ -105,6 +104,7 @@ const profileStore: any = {
           return response.json()
         })
         .then((data) => {
+          console.log(data)
           commit(MUTATIONS.SET_JQL_SEARCH_RESULTS, data)
         })
     },

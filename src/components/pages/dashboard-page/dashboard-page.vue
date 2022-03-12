@@ -10,20 +10,21 @@
       <tbody>
         <tr v-for="issue in dashboardData.issues" :key="issue.id">
           <td headers="basic-fname">
-            <div>
-              <p>{{ issue.key }}</p>
-              <p>{{ issue.fields.summary }}</p>
-            </div>
+            <img
+              alt=""
+              :src="issue.fields.issuetype.iconUrl"
+              width="16"
+              height="16"
+            />
+          </td>
+
+          <td headers="basic-fname">{{ issue.key }}</td>
+
+          <td headers="basic-fname">
+            {{ issue.fields.summary }}
           </td>
 
           <td headers="basic-fname">{{ issue.fields.status.name }}</td>
-
-          <td headers="basic-fname" class="align-right">
-            <c-button @clicked="goToTicketRoute(issue.key)">
-              <!-- TODO: This content should come from somewhere -->
-              Open issue
-            </c-button>
-          </td>
         </tr>
       </tbody>
     </table>
@@ -89,6 +90,9 @@ export default defineComponent({
             status: {
               ...x.fields?.status,
             },
+            issuetype: {
+              ...x.fields?.issuetype,
+            },
           },
         }
       })
@@ -126,7 +130,7 @@ export default defineComponent({
     },
 
     jiraJQLRequest() {
-      const fields = ['summary', 'assignee', 'status']
+      const fields = ['summary', 'assignee', 'status', 'issuetype']
       const jql = this.settings.dashboardJql
 
       this.fetchDataWithJqlAction({ fields, jql })
