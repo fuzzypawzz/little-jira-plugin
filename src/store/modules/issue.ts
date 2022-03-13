@@ -42,6 +42,13 @@ const issueStore: any = {
         mode: 'same-origin',
         cache: 'no-cache',
         headers: {
+          /**
+           * WORKAROUND
+           * Jira has a problem with the user-agent-string Mozilla/5.0..
+           * Read the issue on atlassian forums:
+           * https://community.atlassian.com/t5/Jira-questions/Jira-7-rest-api-XSRF-check-failed-for-post-issue-with/qaq-p/488706
+           */
+          'User-Agent': 'rubbish',
           'Content-Type': 'application/json',
         },
       }
@@ -74,7 +81,11 @@ const issueStore: any = {
       return fetchAction(contructedUrl, settings)
         .then((response) => response.json())
         .then((data: JiraIssue) => {
+          console.log(data)
           commit(MUTATIONS.ADD_ISSUE_DATA, data)
+        })
+        .catch((error) => {
+          console.error('[ACTIONS.FETCH_ISSUE] failed to get issue data. Error: ' + error)
         })
     },
   },

@@ -85,7 +85,6 @@ const rootStore: any = createStore({
               jiraUrl: storageData[LOCAL_STORAGE_KEYS.JIRA_URL],
               dashboardJql: storageData[LOCAL_STORAGE_KEYS.JQL],
             }
-            console.log(storageData)
             commit(MUTATIONS.SET_SETTINGS, settings)
             resolve(state.settings)
           })
