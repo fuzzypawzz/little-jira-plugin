@@ -34,5 +34,12 @@ npm run serve
 npm run build
 ```
 
+### Pages and entries
+We are dealing with these 4 primary pages/scripts:
+1. Background script - Executed immediately on start of the extension. Polyfill loaded as defined in manifest.json.
+2. Content script - Injected into the browser tab matching the url defined in settings. Polyfill is injected in the tab too.
+3. Options page - Polyfill is defined as script reference in the HTML page. Polyfill is available in dist by webpack copy plugin.
+4. Popup page - Polyfill is defined as script reference in the HTML page. Polyfill is available in dist by webpack copy plugin.
+
 ### Customize Vue configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
