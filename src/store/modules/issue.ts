@@ -81,7 +81,6 @@ const issueStore: any = {
       return fetchAction(contructedUrl, settings)
         .then((response) => response.json())
         .then((data: JiraIssue) => {
-          console.log(data)
           commit(MUTATIONS.ADD_ISSUE_DATA, data)
         })
         .catch((error) => {

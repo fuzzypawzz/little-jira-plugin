@@ -66,6 +66,13 @@ const profileStore: any = {
         mode: 'same-origin',
         cache: 'no-cache',
         headers: {
+          /**
+           * WORKAROUND
+           * Jira has a problem with the user-agent-string Mozilla/5.0..
+           * Read the issue on atlassian forums:
+           * https://community.atlassian.com/t5/Jira-questions/Jira-7-rest-api-XSRF-check-failed-for-post-issue-with/qaq-p/488706
+           */
+          'User-Agent': 'rubbish',
           'Content-Type': 'application/json',
         },
       }
@@ -109,6 +116,12 @@ const profileStore: any = {
         })
         .then((data) => {
           commit(MUTATIONS.SET_JQL_SEARCH_RESULTS, data)
+        })
+        .catch((error) => {
+          console.error(
+            '[ACTIONS.FETCH_DATA_WITH_JQL] failed to get issue data. Error: ' +
+              error
+          )
         })
     },
   },
