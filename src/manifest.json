@@ -8,7 +8,8 @@
   "options_ui": {
       "page": "options.html",
       "browser_style": true,
-      "chrome_style": true
+      "chrome_style": true,
+      "open_in_tab": true
   },
 
   "browser_specific_settings": {
