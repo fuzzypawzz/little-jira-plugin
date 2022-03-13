@@ -78,14 +78,14 @@ const rootStore: any = createStore({
       const keys = [LOCAL_STORAGE_KEYS.JIRA_URL, LOCAL_STORAGE_KEYS.JQL]
 
       return new Promise((resolve, reject) => {
-        browser.storage.local
+        browser.storage.sync
           .get(keys)
           .then((storageData) => {
             const settings: ISettings = {
               jiraUrl: storageData[LOCAL_STORAGE_KEYS.JIRA_URL],
               dashboardJql: storageData[LOCAL_STORAGE_KEYS.JQL],
             }
-
+            console.log(storageData)
             commit(MUTATIONS.SET_SETTINGS, settings)
             resolve(state.settings)
           })

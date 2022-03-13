@@ -56,31 +56,31 @@ export default defineComponent({
   },
 
   methods: {
-    getLocalStorage: browser.storage.local.get,
-    setLocalStorage: browser.storage.local.set,
-
     restoreStorageData() {
       const keys = [this.jiraUrl.storageKey, this.jql.storageKey]
 
-      this.getLocalStorage(keys)
-        .then((storageData) => {
+      // We can use browser both in Chrome and Firefox thanks to the webextensions polyfill.
+      browser.storage.sync
+        .get(keys)
+        .then((storageData: any) => {
           this.jiraUrl.value = storageData[this.jiraUrl.storageKey]
           this.jql.value = storageData[this.jql.storageKey]
         })
-        .catch((error) => {
+        .catch((error: string) => {
           this.infoMessage = error
         })
     },
 
     saveStorageData() {
-      this.setLocalStorage({
-        [this.jiraUrl.storageKey]: this.jiraUrl.value,
-        [this.jql.storageKey]: this.jql.value,
-      })
+      browser.storage.sync
+        .set({
+          [this.jiraUrl.storageKey]: this.jiraUrl.value,
+          [this.jql.storageKey]: this.jql.value,
+        })
         .then(() => {
           this.infoMessage = 'Settings saved!'
         })
-        .catch((error) => {
+        .catch((error: string) => {
           this.infoMessage = error
         })
     },

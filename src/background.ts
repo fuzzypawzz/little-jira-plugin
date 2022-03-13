@@ -5,7 +5,7 @@ let jiraUrl: ''
 
 // TODO: Handle errors and scenario where jiraUrl is not set
 // UI Should probably display an error if possible so early in the process.
-browser.storage.local.get([LOCAL_STORAGE_KEYS.JIRA_URL]).then((storageData) => {
+browser.storage.sync.get([LOCAL_STORAGE_KEYS.JIRA_URL]).then((storageData) => {
   jiraUrl = storageData[LOCAL_STORAGE_KEYS.JIRA_URL]
 })
 

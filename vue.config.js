@@ -49,6 +49,7 @@ module.exports = defineConfig({
       title: "Options",
     },
   },
+
   pluginOptions: {
     browserExtension: {
       componentOptions: {
