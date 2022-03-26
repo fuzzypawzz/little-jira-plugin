@@ -24,14 +24,11 @@ export declare type JiraIssue = {
   }
 }
 
-declare type FieldsBase = {
+declare type Fields = {
   issuelinks?: IssueLinkEntry[]
   issuetype?: IssueType
   status?: Status
   summary?: string
-}
-
-declare type Fields = FieldsBase & {
   assignee?: UserInfo | null
   attachment?: AttachmentEntry[]
   comment?: {
@@ -90,7 +87,7 @@ export declare type CommentEntry = {
 export declare type IssueLinkEntry = {
   id: string
   inwardIssue: {
-    fields: FieldsBase
+    fields: Fields
     id: string
     key: string
     self: string
@@ -138,7 +135,7 @@ export declare type Status = {
 }
 
 export declare type SubTaskEntry = {
-  fields: FieldsBase
+  fields: Fields
   id: string
   key: string
   self: string

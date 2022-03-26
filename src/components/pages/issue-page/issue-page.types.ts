@@ -31,5 +31,4 @@ export interface IDestructuredIssueData {
   labels: string[]
   reporter: UserInfo | EmptyObject
   subtasks: SubTaskEntry[]
-  status: Partial<EnrichedStatus>
 }

@@ -29,97 +29,17 @@
       </div>
     </div>
 
-    <table class="aui lj-mb-2">
-      <tbody>
-        <tr>
-          <td headers="basic-fname">Current status</td>
-          <td headers="basic-lname">
-            <span class="aui-lozenge" :class="issueData.status.lozengeStyle">
-              {{ issueData.status.name }}
-            </span>
-          </td>
-        </tr>
-        <tr>
-          <td headers="basic-lname">Assignee</td>
-          <td headers="basic-username">{{ issueData.assignee }}</td>
-        </tr>
-        <tr>
-          <td headers="basic-username">Issue type</td>
-          <td headers="basic-username">
-            <img
-              alt=""
-              :src="issueData.issuetype.iconUrl"
-              width="16"
-              height="16"
-            />
-            {{ issueData.issuetype.name }}
-          </td>
-        </tr>
-        <tr>
-          <td headers="basic-lname">Reporter</td>
-          <td headers="basic-username">
-            {{ issueData.reporter.displayName }} -
-            {{ issueData.reporter.emailAddress }}
-          </td>
-        </tr>
-        <tr>
-          <td headers="basic-username">Labels</td>
-          <td headers="basic-username">
-            <span
-              v-for="label in issueData.labels"
-              :key="label"
-              class="aui-lozenge aui-lozenge-subtle aui-lozenge-complete"
-              style="margin-right: 4px"
-            >
-              {{ label }}
-            </span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <details-section :data="getIssueGetter" />
 
+    <!-- TODO: Make this secure (v-html xss prone) -->
     <section
       class="description-wrapper"
       v-html="issueData.description"
     ></section>
 
-    <div v-if="issueData.subtasks.length">
-      <br />
-      <h5 class="margin--0">Sub tasks</h5>
-      <table class="aui">
-        <tbody>
-          <tr v-for="subtask in issueData.subtasks" :key="subtask.id">
-            <td headers="basic-fname">
-              <img
-                alt=""
-                :src="subtask.fields.priority.iconUrl"
-                width="16"
-                height="16"
-              />
-            </td>
-            <td headers="basic-fname">{{ subtask.key }}</td>
-            <td headers="basic-lname">
-              <span
-                class="aui-lozenge aui-lozenge-subtle"
-                :class="
-                  getLozengeStyle(
-                    subtask.fields.status.statusCategory.colorName
-                  )
-                "
-              >
-                {{ subtask.fields.status.name }}
-              </span>
-            </td>
-            <td headers="basic-fname">
-              <a :href="createBrowseUrl(subtask.key)" target="_blank">
-                {{ subtask.fields.summary }}
-              </a>
-            </td>
-            <td headers="basic-fname">{{ subtask.fields.priority.name }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <br />
+
+    <sub-task-list v-if="shouldRender.subtaskList" :data="issueData.subtasks" />
   </div>
 </template>
 
@@ -127,6 +47,8 @@
 import { defineComponent } from 'vue'
 
 import CLink from '@/components/Atoms/CLink/CLink.vue'
+import SubTaskList from './private/subtask-list.vue'
+import DetailsSection from './private/details-section.vue'
 
 import { mapMutations, mapActions, mapGetters } from 'vuex'
 import { MUTATIONS as INDEX_MUTATIONS } from '@/store'
@@ -141,7 +63,7 @@ import { JiraIssue } from '@/store/modules/issue.types'
 import { IDestructuredIssueData } from './issue-page.types'
 
 export default defineComponent({
-  components: { CLink },
+  components: { CLink, SubTaskList, DetailsSection },
 
   computed: {
     ...mapGetters({
@@ -150,6 +72,26 @@ export default defineComponent({
 
     editIssueLink(): string {
       return `secure/EditIssue!default.jspa?id=${this.issueData?.id}`
+    },
+
+    shouldRender(): { [index: string]: boolean } {
+      return {
+        subtaskList: !!this.issueData.subtasks.length,
+      }
+    },
+
+    issue(): JiraIssue {
+      return this.getIssueGetter
+    },
+
+    status(): any {
+      const status = this.issue.fields?.status
+      const colorName = status?.statusCategory?.colorName
+
+      return {
+        name: status?.name,
+        lozengeStyle: getLozengeStyle(colorName),
+      }
     },
 
     issueData(): IDestructuredIssueData {
@@ -173,12 +115,6 @@ export default defineComponent({
         labels: fields?.labels ?? [],
         reporter: fields?.reporter ?? {},
         subtasks: fields?.subtasks ?? [],
-        status: {
-          ...fields?.status,
-          lozengeStyle: getLozengeStyle(
-            fields?.status?.statusCategory?.colorName
-          ),
-        },
       }
     },
   },
