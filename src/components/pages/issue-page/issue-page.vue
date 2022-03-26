@@ -32,7 +32,7 @@
     </div>
     <br />
     <div style="display: flex">
-      <div>
+      <div style="flex-grow: 1">
         <section>
           <h4>Details</h4>
           <details-section :data="getIssueGetter" />
@@ -55,7 +55,7 @@
           />
         </section>
       </div>
-      <div style="width: 30%; padding-left: 20px">
+      <div style="padding-left: 20px; width: 35%">
         <section>
           <h4>People</h4>
           <dl class="description-list">
