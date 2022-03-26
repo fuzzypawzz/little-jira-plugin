@@ -154,6 +154,7 @@ export default defineComponent({
         priority: fields?.priority ?? {},
         labels: fields?.labels ?? [],
         reporter: fields?.reporter ?? {},
+        resolution: fields?.resolution ?? {},
         subtasks: fields?.subtasks ?? [],
       }
     },
@@ -162,6 +163,10 @@ export default defineComponent({
   mounted() {
     this.fetchIssueAction(this.$route.params.issueId)
     this.showModal()
+
+    setTimeout(() => {
+      console.log(this.getIssueGetter)
+    }, 1000)
   },
 
   methods: {

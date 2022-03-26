@@ -26,6 +26,14 @@
       </tr>
 
       <tr>
+        <td headers="basic-fname">Resolution</td>
+
+        <td headers="basic-lname">
+          {{ issueData.resolution }}
+        </td>
+      </tr>
+
+      <tr>
         <td headers="basic-username">Labels</td>
 
         <td headers="basic-username">
@@ -60,6 +68,7 @@ declare type DestructuredDetails = {
     iconUrl: string | undefined
   }
   labels: string[]
+  resolution: string | undefined
 }
 
 export default defineComponent({
@@ -86,6 +95,7 @@ export default defineComponent({
           iconUrl: fields?.issuetype?.iconUrl,
         },
         labels: fields?.labels ?? [],
+        resolution: fields?.resolution?.name ?? 'Unresolved',
       }
     },
   },

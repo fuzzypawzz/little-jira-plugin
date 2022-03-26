@@ -42,6 +42,7 @@ declare type Fields = {
   labels?: string[]
   priority?: Priority
   reporter?: UserInfo
+  resolution?: Resolution
   subtasks?: SubTaskEntry[] | []
   updated?: string
 }
@@ -60,6 +61,13 @@ export declare type UserInfo = {
   name: string
   self: string
   timeZone: string
+}
+
+export declare type Resolution = {
+  description: string
+  id: string
+  name: string
+  self: string
 }
 
 export declare type AttachmentEntry = {

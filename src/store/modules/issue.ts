@@ -60,6 +60,7 @@ const issueStore: any = {
           'description',
           'status',
           'assignee',
+          'resolution',
           'issuetype',
           'reporter',
           'subtasks',
@@ -84,7 +85,9 @@ const issueStore: any = {
           commit(MUTATIONS.ADD_ISSUE_DATA, data)
         })
         .catch((error) => {
-          console.error('[ACTIONS.FETCH_ISSUE] failed to get issue data. Error: ' + error)
+          console.error(
+            '[ACTIONS.FETCH_ISSUE] failed to get issue data. Error: ' + error
+          )
         })
     },
   },
