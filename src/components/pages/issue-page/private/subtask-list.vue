@@ -1,7 +1,5 @@
 <template>
   <div>
-    <h5 class="margin--0">Sub tasks</h5>
-
     <table class="aui">
       <tbody>
         <tr v-for="subtask in subtasks" :key="subtask.id">

@@ -12,11 +12,6 @@
       </tr>
 
       <tr>
-        <td headers="basic-lname">Assignee</td>
-        <td headers="basic-username">{{ issueData.assignee }}</td>
-      </tr>
-
-      <tr>
         <td headers="basic-username">Issue type</td>
 
         <td headers="basic-username">
@@ -27,15 +22,6 @@
             height="16"
           />
           {{ issueData.issueType.name }}
-        </td>
-      </tr>
-
-      <tr>
-        <td headers="basic-lname">Reporter</td>
-
-        <td headers="basic-username">
-          {{ issueData.reporter.displayName }} -
-          {{ issueData.reporter.emailAddress }}
         </td>
       </tr>
 
@@ -69,14 +55,9 @@ declare type DestructuredDetails = {
     name: string | undefined
     lozengeStyle: string
   }
-  assignee: string
   issueType: {
     name: string | undefined
     iconUrl: string | undefined
-  }
-  reporter: {
-    displayName: string | undefined
-    emailAddress: string | undefined
   }
   labels: string[]
 }
@@ -91,7 +72,6 @@ export default defineComponent({
 
   computed: {
     issueData(): DestructuredDetails {
-      const renderedFields = this.data?.renderedFields
       const fields = this.data?.fields
       const statusColorName =
         this.data?.fields?.status?.statusCategory?.colorName
@@ -101,14 +81,9 @@ export default defineComponent({
           name: fields?.status?.name,
           lozengeStyle: getLozengeStyle(statusColorName),
         },
-        assignee: fields?.assignee?.displayName ?? '-',
         issueType: {
           name: fields?.issuetype?.name,
           iconUrl: fields?.issuetype?.iconUrl,
-        },
-        reporter: {
-          displayName: fields?.reporter?.displayName,
-          emailAddress: fields?.reporter?.emailAddress,
         },
         labels: fields?.labels ?? [],
       }

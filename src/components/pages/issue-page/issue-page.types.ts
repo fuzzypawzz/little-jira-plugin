@@ -20,6 +20,7 @@ export interface IDestructuredIssueData {
   key: string
   assignee: UserInfo | '-'
   created: string | undefined
+  updated: string | undefined
   description: string | undefined
   lastUpdated: string | undefined
   attachments: AttachmentEntry[]

@@ -1,45 +1,84 @@
 <template>
   <div>
-    <span>{{ issueData.key }}</span>
-    <span>- Created on: {{ issueData.created }}</span>
-    <h2 class="margin--0">{{ issueData.summary }}</h2>
-    <br />
-    <div class="aui-toolbar2" role="toolbar">
-      <div class="aui-toolbar2-inner">
-        <div class="aui-toolbar2-primary">
-          <div class="aui-buttons">
-            <c-link
-              class="aui-button aui-button-primary"
-              :href="editIssueLink"
-              target="_blank"
-              >Edit</c-link
-            >
-          </div>
+    <div>
+      <p>
+        <c-link href="/">{{ issueData.key }}</c-link>
+      </p>
+      <h2 class="margin--0">{{ issueData.summary }}</h2>
+      <div class="aui-toolbar2" role="toolbar">
+        <div class="aui-toolbar2-inner">
+          <div class="aui-toolbar2-primary">
+            <div class="aui-buttons">
+              <c-link
+                class="aui-button aui-button-primary"
+                :href="editIssueLink"
+                target="_blank"
+                >Edit</c-link
+              >
+            </div>
 
-          <div class="aui-buttons">
-            <c-link asButton :href="createBrowseUrl(issueData.key)"
-              >Go to ticket in Jira</c-link
-            >
-          </div>
+            <div class="aui-buttons">
+              <c-link asButton :href="createBrowseUrl(issueData.key)"
+                >Go to ticket in Jira</c-link
+              >
+            </div>
 
-          <div class="aui-buttons">
-            <c-button disabled>Assign to me</c-button>
+            <div class="aui-buttons">
+              <c-button disabled>Assign to me</c-button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-
-    <details-section :data="getIssueGetter" />
-
-    <!-- TODO: Make this secure (v-html xss prone) -->
-    <section
-      class="description-wrapper"
-      v-html="issueData.description"
-    ></section>
-
     <br />
+    <div style="display: flex">
+      <div>
+        <section>
+          <h4>Details</h4>
+          <details-section :data="getIssueGetter" />
+        </section>
+        <br />
+        <!-- TODO: Make this secure (v-html xss prone) -->
+        <section>
+          <h4>Description</h4>
+          <div class="description-wrapper" v-html="issueData.description"></div>
+        </section>
 
-    <sub-task-list v-if="shouldRender.subtaskList" :data="issueData.subtasks" />
+        <br />
+
+        <section>
+          <h4>Sub tasks</h4>
+          <sub-task-list
+            style="margin: 8px auto"
+            v-if="shouldRender.subtaskList"
+            :data="issueData.subtasks"
+          />
+        </section>
+      </div>
+      <div style="width: 30%; padding-left: 20px">
+        <section>
+          <h4>People</h4>
+          <dl class="description-list">
+            <dt>Assignee</dt>
+            <dd>{{ issueData.assignee.displayName }}</dd>
+
+            <dt>Reporter</dt>
+            <dd>{{ issueData.reporter.displayName }}</dd>
+          </dl>
+        </section>
+        <br />
+        <section>
+          <h4>Dates</h4>
+          <dl class="description-list">
+            <dt>Created:</dt>
+            <dd>{{ issueData.created }}</dd>
+
+            <dt>Updated:</dt>
+            <dd>{{ issueData.updated }}</dd>
+          </dl>
+        </section>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -102,8 +141,9 @@ export default defineComponent({
       return {
         id: issue.id,
         key: issue.key,
-        assignee: renderedFields?.assignee ?? '-',
+        assignee: fields?.assignee ?? '-',
         created: renderedFields?.created,
+        updated: renderedFields?.updated,
         description: renderedFields?.description,
         lastUpdated: renderedFields?.updated,
         attachments: renderedFields?.attachment ?? [],
@@ -150,6 +190,20 @@ export default defineComponent({
 .margin {
   &--0 {
     margin: 0px;
+  }
+}
+
+.description-list {
+  display: flex;
+  flex-wrap: wrap;
+
+  & dt {
+    width: 33%;
+  }
+
+  & dd {
+    margin-left: auto;
+    width: 66%;
   }
 }
 
