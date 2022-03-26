@@ -151,3 +151,28 @@ export declare type SubTaskEntry = {
 
 // TODO: This contains the keys from Fields, but the value types are different
 declare type RenderedFields = Fields
+
+/**
+ * API Reference
+ * https://docs.atlassian.com/software/jira/docs/api/REST/latest/#issue-getIssueWorklog
+ */
+declare type WorklogEntry = {
+  self: string
+  author: UserInfo
+  updateAuthor: UserInfo
+  comment: string
+  created: string
+  updated: string
+  started: string
+  timeSpent: string
+  timeSpentSeconds: number
+  id: string
+  issueId: string
+}
+
+export declare type Worklog = {
+  startAt: number
+  maxResults: number
+  total: number
+  worklogs: WorklogEntry[] | []
+}
